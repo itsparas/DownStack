@@ -1,0 +1,4 @@
+{
+  "extends": "@downstack/typescript-config/base.json",
+  "include": ["src"]
+}

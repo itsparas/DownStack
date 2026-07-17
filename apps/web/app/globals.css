@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+/* Tailwind v4 only scans the app by default — include the shared UI package. */
+@source "../../../packages/ui/src";
+
+/*
+ * The Downstack look, Rev B: warm paper instead of blueprint ink.
+ * Modeled on the Claude / Anthropic design language — ivory ground,
+ * near-black text, terracotta accent, serif voice, soft corners.
+ *
+ * The semantic token NAMES are unchanged (ink, panel, chalk, amber…)
+ * so every component retunes itself from this file alone:
+ *   ink        → the page ground (warm ivory)
+ *   panel      → cards and bands (deeper ivory)
+ *   raised     → inset chrome: code headers, progress tracks
+ *   line       → hairline borders
+ *   chalk      → primary text (near-black)
+ *   chalkdim   → body text
+ *   chalkfaint → labels, metadata
+ *   amber      → primary accent, intuition/mentor (terracotta)
+ *   copper     → mechanics/warstory (kraft brown)
+ *   trace      → internals/deepdive/quiz (deep teal)
+ *   fieldgreen → field/model (olive green)
+ *   redline    → pitfalls only (signal red)
+ */
+@theme {
+  /* Warm-paper palette */
+  --color-ink: #faf9f5;
+  --color-panel: #f1efe7;
+  --color-raised: #e8e5d9;
+  --color-line: #ddd8ca;
+  --color-chalk: #1f1e1c;
+  --color-chalkdim: #45423b;
+  --color-chalkfaint: #767268;
+  --color-amber: #ae5630;
+  --color-copper: #8a5a2b;
+  --color-trace: #1f7a8c;
+  --color-fieldgreen: #4e7d45;
+  --color-redline: #b42318;
+
+  /* Soft, Claude-style corners: every rounded-sm card relaxes at once. */
+  --radius-sm: 0.625rem;
+
+  /* Type — serif-led, the Claude voice */
+  --font-display: "Source Serif 4 Variable", ui-serif, Georgia, serif;
+  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ------------------------------------------------------------------ */
+/* Dark theme — same drafting table, lights off. A no-flash script in
+   the layout stamps data-theme (stored choice, else system preference)
+   on <html> before first paint; the toggle in the nav flips it. Every
+   component retunes automatically because all color utilities resolve
+   through these variables.                                             */
+/* ------------------------------------------------------------------ */
+:root[data-theme="dark"] {
+  --color-ink: #211f1c;
+  --color-panel: #2a2825;
+  --color-raised: #343128;
+  --color-line: #45412f;
+  --color-chalk: #f0eee6;
+  --color-chalkdim: #c9c5b6;
+  --color-chalkfaint: #94907f;
+  --color-amber: #d97757;
+  --color-copper: #c08b52;
+  --color-trace: #63b8c6;
+  --color-fieldgreen: #82b874;
+  --color-redline: #e5655a;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Shiki dual-theme: swap token colors when the lights go off. */
+:root[data-theme="dark"] .shiki,
+:root[data-theme="dark"] .shiki span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-chalk);
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-amber) 25%, transparent);
+  color: var(--color-chalk);
+}
+
+/* ------------------------------------------------------------------ */
+/* The drafting-table grid, now on paper: fine 32px lines + heavier
+   160px construction lines, both barely-there. Pages opt in.           */
+/* ------------------------------------------------------------------ */
+.blueprint-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-line) 45%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-line) 45%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-line) 80%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-line) 80%, transparent) 1px,
+      transparent 1px
+    );
+  background-size:
+    32px 32px,
+    32px 32px,
+    160px 160px,
+    160px 160px;
+}
+
+.blueprint-fade {
+  mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+}
+
+/* ------------------------------------------------------------------ */
+/* Shiki code blocks — we provide the chrome, shiki provides the tokens */
+/* ------------------------------------------------------------------ */
+.shiki {
+  background-color: transparent !important;
+  overflow-x: auto;
+  padding: 1.1rem 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.shiki code {
+  font-family: var(--font-mono);
+  counter-reset: line;
+}
+
+/* Hero strata draw-in */
+@keyframes strata-draw {
+  from {
+    stroke-dashoffset: 640;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.strata-line {
+  stroke-dasharray: 640;
+  animation: strata-draw 1.6s ease-out both;
+}
+
+.strata-line-2 {
+  animation-delay: 0.25s;
+}
+.strata-line-3 {
+  animation-delay: 0.5s;
+}
+.strata-line-4 {
+  animation-delay: 0.75s;
+}

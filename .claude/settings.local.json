@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem apps\\\\web -Recurse -File -Exclude node_modules | Where-Object { $_.FullName -notmatch 'node_modules|\\\\.next' } | Select-Object -ExpandProperty FullName)",
+      "PowerShell(pnpm install *)",
+      "Bash(./node_modules/.bin/tsc --noEmit)",
+      "PowerShell(pnpm typecheck *)",
+      "PowerShell(foreach \\($n in @\\('downstack','understrate','machinefloor','bedplate','itch'\\)\\) { $r = try { \\(Resolve-DnsName \"$n.io\" -Type NS -ErrorAction Stop | Where-Object Type -eq 'NS'\\).Count } catch { 0 }; Write-Output \"$n.io NS-records: $r\" })",
+      "Bash(sed -i 's|Downstack — learn the layer beneath|Downstack — learn down the stack|g' apps/web/app/layout.tsx)",
+      "Bash(sed -i 's|\\\\*\\\\*Learn the layer beneath\\\\.\\\\*\\\\*|**Learn down the stack.**|' README.md)",
+      "PowerShell(pnpm build *)",
+      "Bash(pnpm typecheck *)",
+      "Bash(pnpm build *)"
+    ]
+  }
+}
